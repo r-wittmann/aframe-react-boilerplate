@@ -7,8 +7,8 @@ export default props => (
       <Entity 
         cursor="fuse: true; fuseTimeout: 2000"
         objects=".clickable"
-        position="0 0 -0.1"
-        geometry="primitive: ring; radiusInner: 0.0015; radiusOuter: 0.002"
+        position="0 0 -1"
+        geometry="primitive: ring; radiusInner: 0.015; radiusOuter: 0.02"
         material="color: green; shader: flat"
       >
         <a-animation 
