@@ -7,55 +7,74 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Camera from './components/Camera';
-import Text from './components/Text';
 import Sky from './components/Sky';
+import Floor from './components/Floor';
+import SelectableBox from './components/SelectableBox';
 
 class VRScene extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {color: 'red'};
+    this.state = {
+      color: 'red',
+      cameraPosition: '0 0 0',
+      selectedBox: -1,
+      selectableBoxList: [{
+        color: 'red',
+      },{
+        color: 'red',
+      },{
+        color: 'red',
+      },{
+        color: 'red',
+      },{
+        color: 'red',
+      },{
+        color: 'red',
+      }]
+    };
+    this.selectBox = this.selectBox.bind(this);
   }
 
-  changeColor() {
-    const colors = ['red', 'orange', 'yellow', 'green', 'blue'];
+  calculatePosition(index, boxCount) {
+    const distance = 10;
+    const visionAngle = 100;
+    const x = distance * Math.cos((2 * (index + 0.5) * Math.PI / boxCount) / (360 / visionAngle) + (180 - visionAngle) * Math.PI / 360);
+    const y = 1.6;
+    const z = -distance *  Math.sin((2 * (index + 0.5) * Math.PI / boxCount)/ (360 / visionAngle) + (180 - visionAngle) * Math.PI / 360);
+    return {x: x, y: y, z: z};
+  }
+
+  selectBox(id) {
     this.setState({
-      color: colors[Math.floor(Math.random() * colors.length)]
+      deselectedBox: this.state.selectedBox,
+      selectedBox: id,
     });
   }
 
   render () {
     return (
       <Scene>
-        <Camera>
-          <a-cursor
-            animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
->
-          </a-cursor>
-        </Camera>
+        <Camera position={this.state.cameraPosition} />
 
         <Sky src="url(https://rawgit.com/aframevr/assets/gh-pages/360-image-gallery-boilerplate/img/sechelt.jpg)"/>
 
-        <Text
-          text='Hello World!'
-          color='#DADADA'
-          position='-1.75 1 -3'/>
+        <Floor />
 
         <Entity light={{type: 'ambient', color: '#888'}}/>
         <Entity light={{type: 'directional', intensity: 0.5}} position='-1 1 0'/>
-        <Entity light={{type: 'directional', intensity: 1}} position='1 1 0'/>
+        <Entity light={{type: 'directional', intensity: 0.5}} position='1 1 -1'/>
 
-        <Entity
-          animation__rot={{property: 'rotation', dur: 2000, loop: true, to: '360 360 360'}}
-          animation__sca={{property: 'scale', dir: 'alternate', dur: 100, loop: true, to: '1.1 1.1 1.1'}}
-          geometry='primitive: box'
-          material={{color: this.state.color, opacity: 0.6}}
-          position='0 -0.5 -3'
-          onClick={this.changeColor.bind(this)}>
-          <Entity
-            animation__scale={{property: 'scale', dir: 'alternate', dur: 100, loop: true, to: '2 2 2'}}
-            geometry='primitive: box; depth: 0.2; height: 0.2; width: 0.2'
-            material={{color: '#24CAFF'}}/>
-        </Entity>
+        {this.state.selectableBoxList.map((box, index) => 
+          <SelectableBox
+            key={index}
+            id={index}
+            position={this.calculatePosition(index, this.state.selectableBoxList.length)}
+            color={box.color}
+            onSelect={this.selectBox}
+            selected={index === this.state.selectedBox}
+          />
+        )}
+
       </Scene>
     );
   }

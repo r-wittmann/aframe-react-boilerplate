@@ -3,6 +3,31 @@ import React from 'react';
 
 export default props => (
   <Entity>
-    <Entity camera="" look-controls="" wasd-controls="" {...props}/>
+    <Entity id="main-camera" camera="userHeight: 1.6" look-controls wasd-controls="" {...props}>
+      <Entity 
+        cursor="fuse: true; fuseTimeout: 2000"
+        objects=".clickable"
+        position="0 0 -0.1"
+        geometry="primitive: ring; radiusInner: 0.0015; radiusOuter: 0.002"
+        material="color: green; shader: flat"
+      >
+        <a-animation 
+          begin="click"
+          easing="ease-in"
+          attribute="scale"
+          fill="backwards"
+          from="0.1 0.1 0.1"
+          to="1 1 1"
+          dur="200"/>
+        <a-animation 
+          begin="cursor-fusing"
+          easing="linear"
+          attribute="scale"
+          fill="backwards"
+          from="1 1 1"
+          to="0.1 0.1 0.1"
+          dur="2000"/>
+      </Entity>
+    </Entity>
   </Entity>
 );

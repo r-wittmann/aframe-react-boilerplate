@@ -6,9 +6,12 @@
     "aframe": "^0.3.2",
     "aframe-animation-component": "^3.0.4",
     "aframe-bmfont-text-component": "^0.1.4",
+    "aframe-look-at-component": "^0.1.2",
     "aframe-react": "^3.4.0",
     "aframe-text-component": "^0.3.0",
-    "babel-polyfill": "^6.3.14"
+    "babel-polyfill": "^6.3.14",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2"
   },
   "scripts": {
     "build": "webpack",
